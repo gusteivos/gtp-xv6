@@ -1,0 +1,16 @@
+#
+# Makefile fragment for the GTP-XV6 mbr bootloader.
+# This is NOT a complete makefile;
+# you must run make in the top-level directory
+# where the Makefile is located.
+#
+
+
+MTHSD=boot/MBR/
+
+
+.MBR_BLoader:
+	$(CC) $(CCFLAGS) $(CCFLAGS_EXTD) -I$(MTHSD) -c $(MTHSD)boot.x86.S -o $(ODIR)/MBR.boot.x86.o
+	$(LD) $(LDFLAGS) -N -e start16 -Ttext 0x7C00 -o $(ODIR)/mbr_bootloader.o $(ODIR)/MBR.boot.x86.o
+	$(OBJDUMP) -S $(ODIR)/mbr_bootloader.o > $(ODIR)/mbr_bootloader.asm
+	$(OBJCOPY) -S -O binary -j .text $(ODIR)/mbr_bootloader.o $(ODIR)/temp_mbr_bootloader

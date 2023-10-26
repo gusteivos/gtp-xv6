@@ -1,2 +1,11 @@
 
+#folders:
+
+#xv6 reference code coming from https://github.com/guilleiguaran/xv6.git
 /xv6
+
+#
+/O
+/D
+
+#files:

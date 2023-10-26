@@ -1,0 +1,17 @@
+#
+# Makefile fragment for the GTP-XV6 gpt bootloader.
+# This is NOT a complete makefile;
+# you must run make in the top-level directory
+# where the Makefile is located.
+#
+
+
+GTHSD=boot/GPT/
+
+
+.GPT_BLoader:
+	$(CC) $(CCFLAGS) $(CCFLAGS_EXTD) -I$(GTHSD) -c $(GTHSD)boot.x86.S -o $(ODIR)/GPT.boot.x86.o
+	$(LD) $(LDFLAGS) -N -o $(ODIR)/gpt_bootloader.o $(ODIR)/GPT.boot.x86.o
+	$(OBJDUMP) -S $(ODIR)/gpt_bootloader.o > $(ODIR)/gpt_bootloader.asm
+	$(OBJCOPY) -S -O binary -j .text $(ODIR)/gpt_bootloader.o $(ODIR)/temp_gpt_bootloader
+	
