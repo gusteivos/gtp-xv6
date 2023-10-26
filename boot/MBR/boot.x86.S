@@ -1,9 +1,9 @@
 #include "_mbr.h"
 
+.code16
 
 .globl start16
 
-.code16
 start16:
     
     cli
@@ -25,7 +25,6 @@ start32:
 
 
 .p2align 2
-
 gdt_start:
     .word 0x0000, 0x0000
     .byte 0x00, 0x00, 0x00, 0x00
@@ -36,8 +35,6 @@ gdt_start:
     .word 0xffff, 0x0000
     .byte 0x00, 0x92, 0xcf, 0x00
 
-    gdt_end:
-
 gdt_descriptor:
-    .word (gdt_end - gdt_start - 1)
+    .word (gdt_descriptor - gdt_start - 1)
     .long gdt_start
