@@ -6,12 +6,24 @@
 #
 
 
+CE =gcc
+
+ifeq ($(UNAME_S),Darwin)
+CE :=x86_64-w64-mingw32-gcc
+endif
+ifeq ($(UNAME_S),Linux)
+CE :=x86_64-w64-mingw32-gcc
+endif
+
+
+CWFLAGS :=-Wall -Werror -m64 -mabi=ms -ffreestanding -MD
+
+LEFLAGS :=-Wall -Werror -m64 -mabi=ms -nostdlib -shared -Wl,-dll -Wl,--subsystem,10 -e efi_main
+
+
 GTHSD=boot/GPT/
 
 
 .GPT_BLoader:
-	$(CC) $(CCFLAGS) $(CCFLAGS_EXTD) -I$(GTHSD) -c $(GTHSD)boot.x86.S -o $(ODIR)/GPT.boot.x86.o
-	$(LD) $(LDFLAGS) -N -o $(ODIR)/gpt_bootloader.o $(ODIR)/GPT.boot.x86.o
-	$(OBJDUMP) -S $(ODIR)/gpt_bootloader.o > $(ODIR)/gpt_bootloader.asm
-	$(OBJCOPY) -S -O binary -j .text $(ODIR)/gpt_bootloader.o $(ODIR)/temp_gpt_bootloader
-	
+	$(CE) $(CWFLAGS) -I$(GTHSD) -c $(GTHSD)boot.efi.c -o $(ODIR)/boot.efi.o
+	$(CE) $(LEFLAGS) -o $(ODIR)/gpt_bootloader.EFI $(ODIR)/boot.efi.o
