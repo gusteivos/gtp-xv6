@@ -8,20 +8,46 @@ start16:
     
     cli
   
-    xorw %ax,%ax
-    movw %ax,%ds
-    movw %ax,%es
-    movw %ax,%ss
+    xorw %ax, %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %ss
 
-    lgdt gdt_start
+    lgdt gdt_descriptor
+    movl %cr0, %eax
+    orl  $0x1, %eax
+    movl %eax, %cr0
 
-    sti
+    ljmp $(1<<3), $start32
 
 
 .code32
 start32:
 
-    nop
+    movw    $(2<<3), %ax
+    movw    %ax, %ds
+    movw    %ax, %es
+    movw    %ax, %ss
+    movw    $00, %ax
+    movw    %ax, %fs
+    movw    %ax, %gs
+
+    movl $start16, %esp
+
+    call wait_for_MM_disk
+    
+
+wait_for_MM_disk:
+
+    mov   $0x1f7, %edx
+    in    (%dx) , %al
+
+    testb $0b11000000, %al
+    cmp   $0b01000000, %al
+    
+    jne wait_for_MM_disk
+
+    ret
 
 
 .p2align 2

@@ -6,12 +6,15 @@
 #
 
 
+CE_UNAME_S :=$(shell uname -s)
+
+
 CE =gcc
 
-ifeq ($(UNAME_S),Darwin)
+ifeq ($(CE_UNAME_S),Darwin)
 CE :=x86_64-w64-mingw32-gcc
 endif
-ifeq ($(UNAME_S),Linux)
+ifeq ($(CE_UNAME_S),Linux)
 CE :=x86_64-w64-mingw32-gcc
 endif
 
