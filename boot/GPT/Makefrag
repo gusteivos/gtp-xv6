@@ -6,16 +6,20 @@
 #
 
 
-CE_UNAME_S :=$(shell uname -s)
-
-
 CE =gcc
 
-ifeq ($(CE_UNAME_S),Darwin)
-CE :=x86_64-w64-mingw32-gcc
-endif
-ifeq ($(CE_UNAME_S),Linux)
-CE :=x86_64-w64-mingw32-gcc
+
+ifneq ($(OS),Windows_NT)
+
+	CE_UNAME_S :=$(shell uname -s)
+
+	ifeq ($(CE_UNAME_S),Darwin)
+	CE :=x86_64-w64-mingw32-gcc
+	endif
+	ifeq ($(CE_UNAME_S),Linux)
+	CE :=x86_64-w64-mingw32-gcc
+	endif
+	
 endif
 
 
