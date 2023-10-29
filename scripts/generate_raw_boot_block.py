@@ -5,7 +5,7 @@ INTERMEDIATE_SIZE = 510
 OUTPUT_SIZE = 512
 
 def main(argv):
-    
+
     if len(argv) < 2:
         print("Usage: python this_script.py <filename>")
         sys.exit(1)
@@ -34,7 +34,7 @@ def main(argv):
         with open(file_name, 'wb') as file: file.write(file_data)
     except Exception as exception:
         print(f"Error writing to file: {exception}")
-        sys.exit(1)    
+        sys.exit(1)
 
 
 if __name__ == "__main__":
