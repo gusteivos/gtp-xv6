@@ -8,7 +8,7 @@ ifeq ($(OS),Windows_NT)
 	MKDIR = mkdir
 else
 	RM = rm -f
-	MKDIR = mkdir -p
+	MKDIR = mkdir -p 
 endif
 
 CC = gcc
@@ -20,9 +20,15 @@ OBJDUMP = objdump
 CCFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -fno-pic -nostdinc 
 CCFLAGS_EXTD =
 
-#temp:
-# LDFLAGS += -mi386pe
-# LDFLAGS += -melf_i386
+
+LDFLAGS = -melf_i386
+
+
+ifeq ($(OS),Windows_NT)
+	LDFLAGS = -mi386pe
+endif
+
+
 LDFLAGS_EXTD =
 
 
@@ -33,10 +39,10 @@ include boot/GPT/Makefrag
 default: $(DDIR) $(ODIR) .MBR_BLoader .GPT_BLoader
 
 $(ODIR):
-	MKDIR $@
+	$(MKDIR) $@
 
 $(DDIR):
-	MKDIR $@
+	$(MKDIR) $@
 
 
 .PHONY: default
