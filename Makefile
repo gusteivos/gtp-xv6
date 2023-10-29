@@ -1,15 +1,19 @@
 
-ODIR = O
 DDIR = D
+IDIR = I
+ODIR = O
 
 
 ifeq ($(OS),Windows_NT)
 	RM = del /Q /F
+	RMDIR = rmdir /s /q
 	MKDIR = mkdir
 else
 	RM = rm -f
+	RMDIR = rmdir -p
 	MKDIR = mkdir -p 
 endif
+
 
 CC = gcc
 LD = ld
@@ -36,13 +40,23 @@ include boot/MBR/Makefrag
 include boot/GPT/Makefrag
 
 
-default: $(DDIR) $(ODIR) .MBR_BLoader .GPT_BLoader
+default: $(DDIR) $(IDIR) $(ODIR) .MBR_BLoader .GPT_BLoader
+
 
 $(ODIR):
 	$(MKDIR) $@
 
 $(DDIR):
 	$(MKDIR) $@
+
+$(IDIR):
+	$(MKDIR) $@
+
+
+clean:
+	$(RMDIR) $(DDIR)	
+	$(RMDIR) $(IDIR)
+	$(RMDIR) $(ODIR)
 
 
 .PHONY: default
