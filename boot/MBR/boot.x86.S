@@ -35,6 +35,15 @@ start32:
     movl $start16, %esp
 
     call wait_for_MM_disk
+
+    movw    $0x8a00, %ax
+    movw    %ax, %dx
+    outw    %ax, %dx
+    movw    $0x8ae0, %ax
+    outw    %ax, %dx
+    
+    spin:
+    jmp     spin
     
 
 wait_for_MM_disk:

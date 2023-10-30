@@ -32,5 +32,5 @@ GTHSD=boot/GPT/
 
 
 .GPT_BLoader:
-	$(CE) $(CWFLAGS) -I$(GTHSD) -c $(GTHSD)boot.efi.c -o $(ODIR)/boot.efi.o
-	$(CE) $(LEFLAGS) -o $(ODIR)/gpt_bootloader.EFI $(ODIR)/boot.efi.o
+	$(CE) $(CWFLAGS) -I$(GTHSD) -c $(GTHSD)boot.efi.c -o $(ODIR)/GPT.boot.efi.o -MF $(DDIR)/GPT.boot.efi.d
+	$(CE) $(LEFLAGS) -o $(ODIR)/temp_gpt_bootloader.EFI $(ODIR)/GPT.boot.efi.o
