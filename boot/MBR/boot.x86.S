@@ -35,26 +35,25 @@ start32:
     movl $start16, %esp
 
     call wait_for_MM_disk
-
-    movw    $0x8a00, %ax
-    movw    %ax, %dx
-    outw    %ax, %dx
-    movw    $0x8ae0, %ax
-    outw    %ax, %dx
-    
-    spin:
-    jmp     spin
     
 
 wait_for_MM_disk:
+    mov   $0x1f7, %dx
 
-    mov   $0x1f7, %edx
-    in    (%dx) , %al
+.wait_loop:
 
+    inb   (%dx) , %al
     testb $0b11000000, %al
-    cmp   $0b01000000, %al
+    jne   .wait_loop
     
-    jne wait_for_MM_disk
+    ret
+
+
+read_lba_sect_MM_disk:
+
+    call wait_for_MM_disk
+
+
 
     ret
 
