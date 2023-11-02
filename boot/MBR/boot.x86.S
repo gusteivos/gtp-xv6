@@ -34,26 +34,76 @@ start32:
 
     movl $start16, %esp
 
-    call wait_for_MM_disk
-    
+spin:
+    mov $0x0001, %ebx
+    mov $0x7dff, %edi
+    call read_lba_sect_MM_disk
+    jmp spin
 
 wait_for_MM_disk:
     mov   $0x1f7, %dx
 
 .wait_loop:
 
-    inb   (%dx) , %al
+    in    (%dx) , %al
     testb $0b11000000, %al
+    cmp   $0b01000000, %al
     jne   .wait_loop
     
     ret
 
 
+/*
+
+    ebx = offset = (lba sector number)
+
+    edi = destin = (destin addres mem)
+
+*/
 read_lba_sect_MM_disk:
 
     call wait_for_MM_disk
 
+    push %ebx
+    push %edi
 
+    mov $0x1  ,  %eax
+    mov $0x1f2,  %edx
+    out %al   , (%dx)
+
+    mov %ebx  ,  %eax
+    mov $0x1f3,  %edx
+    out %al   , (%dx)
+
+    shr $0x08 ,  %eax
+    mov $0x1f4,  %edx
+    out %al   , (%dx)
+
+    shr $0x08 ,  %eax
+    mov $0x1f5,  %edx
+    out %al   , (%dx)
+
+    shr $0x08 ,  %eax
+    
+    or  $0xffffffe0, %eax
+
+    mov $0x1f6,  %edx
+    out %al   , (%dx)
+
+    mov $0x20 ,  %eax
+    mov $0x1f7,  %edx
+    out %al   , (%dx)
+
+    call wait_for_MM_disk
+
+    mov $0x1f0, %edx
+    mov $0x80 , %ecx
+
+    cld
+    rep insl (%dx),%es:(%edi)
+
+    pop %ebx
+    pop %edi
 
     ret
 
